@@ -1,0 +1,330 @@
+<core:View xmlns:core="sap.ui.core" xmlns:layout="sap.ui.layout" xmlns:ctrl="ui.s2p.mm.purchorder.approve.MM_PO_APVExtension.controls" xmlns:form="sap.ui.layout.form" controllerName="ui.s2p.mm.purchorder.approve.view.S3">
+	<!-- S3 screen -->
+	<Page xmlns="sap.m" title="{i18n>view.PurchaseOrder.title}" class="sapUiFioriObjectPage" id="WIDetail">
+		<!-- Header (PurchaseOrderHeader) -->
+		<ObjectHeader title="{SupplierName}" id="Header" numberUnit="{Currency}" number="{parts : [{path : 'Value'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.formatAmount'}" introActive="true" titleActive="true" titlePress="onVendorPress" introPress="onAgentPress">
+			<firstStatus>
+				<ObjectStatus id="ObjectHeaderStatusWiCreatedAt" text="{parts : [{path : 'WiCreatedAt'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.deliveryDateFormatter'}"/>
+			</firstStatus>
+			<attributes>
+				<ObjectAttribute id="ObjectHeaderAttributeCreatedByName" press="onNamePress" text="{CreatedByName}" active="true"/>
+				<ObjectAttribute id="ObjectHeaderAttributeForwardedBy" press="onForwardedPress" text="{parts : [{path : 'ForwardedByName'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.forwardedBy'}" visible="{parts : [{path : 'ForwardedByName'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.commonFieldVisibilityTrigger'}" active="true"/>
+				<ObjectAttribute id="ObjectHeaderAttributeSubstitutedBy" press="onSubstitutingPress" text="{parts : [{path : 'SubstitutingForName'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.substitutedBy'}" visible="{parts : [{path : 'SubstitutingForName'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.commonFieldVisibilityTrigger'}" active="true"/>
+			</attributes>
+			<!-- @ExtensionPoint extHeaderInfo: header details -->
+			<core:ExtensionPoint name="extHeaderInfo"/>
+		</ObjectHeader>
+		<!-- end of Header (PurchaseOrderHeader) -->
+		<layout:Grid id="__grid0">
+			<layout:content>
+				<Link text="{i18n>VIEW_PDFPREVIEW}" press="onViewPDFPreview" emphasized="true"/>
+				<core:InvisibleText id="invisibleponumber" text="{PoNumber}"/>
+			</layout:content>
+		</layout:Grid>
+		<!-- ToggleArea (PurchaseOrderToggleArea) -->
+		<IconTabBar id="tabBar" select="handleTabSelect">
+			<items>
+				<IconTabFilter id="IconTabBarFilterPOInformation" key="contentInfo" text="PO Information">
+					<content>
+						<!-- Information (PurchaseOrderInformation) -->
+						<form:Form class="detailInfoForm" id="InfoForm">
+							<form:layout>
+								<form:ResponsiveLayout/>
+							</form:layout>
+							<form:formContainers>
+								<form:FormContainer>
+									<form:layoutData>
+										<layout:ResponsiveFlowLayoutData linebreak="true" margin="false"/>
+									</form:layoutData>
+									<form:formElements>
+										<form:FormElement id="POInformationPOLabel">
+											<form:layoutData>
+												<layout:ResponsiveFlowLayoutData linebreak="true" margin="false"/>
+											</form:layoutData>
+											<form:label>
+												<Label text="{i18n>view.PurchaseOrder.purchaseOrderLabel}"/>
+											</form:label>
+											<form:fields>
+												<Text text="{PoNumber}">
+													<layoutData>
+														<layout:ResponsiveFlowLayoutData alignItems="End" weight="2"/>
+													</layoutData>
+												</Text>
+											</form:fields>
+										</form:FormElement>
+										<form:FormElement id="POInformationAccountAssignment">
+											<form:layoutData>
+												<layout:ResponsiveFlowLayoutData linebreak="true" margin="false"/>
+											</form:layoutData>
+											<form:label>
+												<Label text="{i18n>view.PurchaseOrder.accountAssignment}"/>
+											</form:label>
+											<form:fields>
+												<Text text="{parts : [{path : 'HeaderInfo'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.accountingFormatter'}">
+													<layoutData>
+														<layout:ResponsiveFlowLayoutData alignItems="End" weight="2"/>
+													</layoutData>
+												</Text>
+											</form:fields>
+										</form:FormElement>
+										<form:FormElement id="POInformationDeliveryDate" visible="{parts : [{path : 'DeliveryDate'}, {path : 'DeliveryDateAlsoLater'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.commonFieldVisibilityTrigger'}">
+											<form:layoutData>
+												<layout:ResponsiveFlowLayoutData linebreak="true" margin="false"/>
+											</form:layoutData>
+											<form:label>
+												<Label text="{i18n>view.PurchaseOrder.deliveryDateLabel}"/>
+											</form:label>
+											<form:fields>
+												<Text text="{parts : [{path : 'DeliveryDate'}, {path : 'DeliveryDateAlsoLater'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.deliveryDateFormatter'}">
+													<layoutData>
+														<layout:ResponsiveFlowLayoutData alignItems="End" weight="2"/>
+													</layoutData>
+												</Text>
+											</form:fields>
+										</form:FormElement>
+										<form:FormElement id="POInformationPlant" visible="{parts : [{path : 'PlantName'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.commonFieldVisibilityTrigger'}">
+											<form:layoutData>
+												<layout:ResponsiveFlowLayoutData linebreak="true" margin="false"/>
+											</form:layoutData>
+											<form:label>
+												<Label text="{i18n>view.PurchaseOrder.plantLabel}"/>
+											</form:label>
+											<form:fields>
+												<Text text="{PlantName}">
+													<layoutData>
+														<layout:ResponsiveFlowLayoutData alignItems="End" weight="2"/>
+													</layoutData>
+												</Text>
+											</form:fields>
+										</form:FormElement>
+										<form:FormElement id="POInformationPaymentTerm" visible="{parts : [{path : 'PaymentTermDescription'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.commonFieldVisibilityTrigger'}">
+											<form:layoutData>
+												<layout:ResponsiveFlowLayoutData linebreak="true" margin="false"/>
+											</form:layoutData>
+											<form:label>
+												<Label text="{i18n>view.PurchaseOrder.paymentTermsLabel}"/>
+											</form:label>
+											<form:fields>
+												<Text text="{PaymentTermDescription}">
+													<layoutData>
+														<layout:ResponsiveFlowLayoutData alignItems="End" weight="2"/>
+													</layoutData>
+												</Text>
+											</form:fields>
+										</form:FormElement>
+										<form:FormElement id="POInformationIncoterm" visible="{parts : [{path : 'Incoterm'}, {path : 'IncotermLocation'}, {path : 'IncotermDescription'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.incoTermsVisibilityTrigger'}">
+											<form:layoutData>
+												<layout:ResponsiveFlowLayoutData linebreak="true" margin="false"/>
+											</form:layoutData>
+											<form:label>
+												<Label text="{i18n>view.PurchaseOrder.incoTermsLabel}"/>
+											</form:label>
+											<form:fields>
+												<Text text="{parts : [{path : 'Incoterm'}, {path : 'IncotermLocation'}, {path : 'IncotermDescription'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.incoTermsFormatter'}">
+													<layoutData>
+														<layout:ResponsiveFlowLayoutData alignItems="End" weight="2"/>
+													</layoutData>
+												</Text>
+											</form:fields>
+										</form:FormElement>
+										<form:FormElement id="POInformationCompany" visible="{parts : [{path : 'CompanyCode'}, {path : 'CompanyCodeDescription'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.companyCodeVisibilityTrigger'}">
+											<form:layoutData>
+												<layout:ResponsiveFlowLayoutData linebreak="true" margin="false"/>
+											</form:layoutData>
+											<form:label>
+												<Label text="{i18n>view.PurchaseOrder.companyCodeLabel}"/>
+											</form:label>
+											<form:fields>
+												<Text text="{parts : [{path : 'CompanyCode'}, {path : 'CompanyCodeDescription'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.companyCodeFormatter'}">
+													<layoutData>
+														<layout:ResponsiveFlowLayoutData alignItems="End" weight="2"/>
+													</layoutData>
+												</Text>
+											</form:fields>
+										</form:FormElement>
+										<!-- 										CPDVendorName -->
+										<form:FormElement id="POInformationCPDVendor" visible="{parts : [{path : 'CPDVendorName'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.stringVisibilityTrigger'}">
+											<form:layoutData>
+												<layout:ResponsiveFlowLayoutData linebreak="true" margin="false"/>
+											</form:layoutData>
+											<form:label>
+												<Label text="{i18n>view.PurchaseOrder.CPDVendorLabel}"/>
+											</form:label>
+											<form:fields>
+												<Text text="{parts : [{path : 'CPDVendorName'}], formatter: 'ui.s2p.mm.purchorder.approve.util.Conversions.stringFormatterInterop'}">
+													<layoutData>
+														<layout:ResponsiveFlowLayoutData alignItems="End" weight="2"/>
+													</layoutData>
+												</Text>
+											</form:fields>
+										</form:FormElement>
+										<form:FormElement id="POInformationOrderingAdress" visible="{parts : [{path : 'OrderingAddress'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.stringVisibilityTrigger'}">
+											<form:layoutData>
+												<layout:ResponsiveFlowLayoutData linebreak="true" margin="false"/>
+											</form:layoutData>
+											<form:label>
+												<Label text="{i18n>view.PurchaseOrder.OrderingAddress}"/>
+											</form:label>
+											<form:fields>
+												<Text text="{parts : [{path : 'OrderingAddress'}], formatter: 'ui.s2p.mm.purchorder.approve.util.Conversions.stringFormatterInterop'}">
+													<layoutData>
+														<layout:ResponsiveFlowLayoutData alignItems="End" weight="2"/>
+													</layoutData>
+												</Text>
+											</form:fields>
+										</form:FormElement>
+										<!-- @ExtensionPoint extInformation: information area -->
+										<core:ExtensionPoint name="extInformation"/>
+									</form:formElements>
+								</form:FormContainer>
+							</form:formContainers>
+						</form:Form>
+						<!-- end of Information (PurchaseOrderInformation) -->
+					</content>
+				</IconTabFilter>
+				<!--PO Header Text  as per PTLM Requirements to be met by PO Comments-->
+				<IconTabFilter id="IconTabBarFilterPOHText" key="contentText" visible="{parts : [{path : 'POHeaderText'}], formatter : 'ui.s2p.mm.purchorder.approve.MM_PO_APVExtension.util.conversion.POnotesVisibilityTrigger'}" text="Header Text">
+					<content>
+						<!-- Notes (PurchaseOrderNotes)  -->
+						<List id="HTextBox" items="{POHeaderText}" showSeparators="None" inset="true">
+							<items>
+								<FeedListItem id="HTextTemplate" text="{Text}" info="{TypeDescr}" senderPress="onNoteSenderPress" timestamp="{parts : [{path : 'NoteIsApproverNote'}, {path : 'CreatedAt'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.noteDateFormatter'}" sender="{parts : [{path : 'NoteIsApproverNote'}, {path : 'CreatedByName'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.approverNoteValueFormatter'}"/>
+							</items>
+						</List>
+						<!-- end of Notes (PurchaseOrderNotes)  -->
+					</content>
+				</IconTabFilter>
+				<!--PO HEader Text un-Commented as per PTLM Requirements to be met by PO Comments-->
+				<!--PO Header Notes  as per PTLM Requirements to be met by PO Comments-->
+				<IconTabFilter id="IconTabBarFilterPOHNotes" key="contentNotes" visible="{parts : [{path : 'POHeaderNote'}], formatter : 'ui.s2p.mm.purchorder.approve.MM_PO_APVExtension.util.conversion.POnotesVisibilityTrigger'}" text="Header Note">
+					<content>
+						<!-- Notes (PurchaseOrderNotes)  -->
+						<List id="HNotesBox" items="{POHeaderNote}" showSeparators="None" inset="true">
+							<items>
+								<FeedListItem id="NoteTemplate" text="{Text}" info="{TypeDescr}" senderPress="onNoteSenderPress" timestamp="{parts : [{path : 'NoteIsApproverNote'}, {path : 'CreatedAt'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.noteDateFormatter'}" sender="{parts : [{path : 'NoteIsApproverNote'}, {path : 'CreatedByName'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.approverNoteValueFormatter'}"/>
+							</items>
+						</List>
+						<!-- end of Notes (PurchaseOrderNotes)  -->
+					</content>
+				</IconTabFilter>
+				<!--PO HEader Note un-Commented as per PTLM Requirements to be met by PO Comments-->
+				<IconTabFilter id="IconTabBarFilterPOAttachments" key="contentAttachments" visible="{parts : [{path : 'Attachments'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.attachmentsVisibilityTrigger'}" text="Attachments"> <!-- count="{NumberOfAttachments}" -->
+					<content>
+						<!-- Attachments (PurchaseOrderAttachments) -->
+						<List id="AttachmentList" items="{Attachments}" showSeparators="None" inset="true">
+							<items>
+								<StandardListItem title="{parts : [{path : 'Description'},{path : 'MimeType'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.formatAttachmentDesc'}" id="AttachmentListItems" type="Navigation" press="onAttachment" icon="{parts : [{path : 'MimeType'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.formatAttachmentIcon'}" description="{parts : [{path : 'FileSize'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.formatAttachmentSize'}" icon-inset="false"/>
+							</items>
+						</List>
+						<!-- end of Attachments (PurchaseOrderAttachments) -->
+					</content>
+				</IconTabFilter>
+				<IconTabFilter id="IconTabBarFilterPOComments" key="POComents" visible="{=${POCOMMENTSCOUNT}&gt;0?true:false}" text="Approver Comments">
+					<!-- icon="sap-icon://comment" count="{POCOMMENTSCOUNT}"-->
+					<content>
+						<!-- PO Comments (PurchaseOrderCommnts)  -->
+						<List id="CommentsBox" items="{POComments}" showSeparators="None" inset="true">
+							<items>
+								<FeedListItem id="POCommentsTemplate" text="{Comtext}" info="{Action}" senderPress="onCommentsSenderPress" timestamp="{ path : 'Comdate' , formatter: 'ui.s2p.mm.purchorder.approve.MM_PO_APVExtension.util.conversion.CommentsDateFormatter'}" sender="{Uname}"/></items>
+						</List>
+						<!-- end of PO Comments (PurchaseOrderComments)  -->
+					</content>
+				</IconTabFilter>
+				<IconTabFilter id="IconTabBarFilterRlease" key="PORelease" text="Release Status"> <!-- count="{PORELEASECOUNT}" -->
+					<!--<content>-->
+					<!-- PO Release table (PurchaseOrderRelease)  -->
+					<Table class="detailControlPadding" id="ReleaseTable" items="{PORelease}" headerText="{i18n>view.PurchaseOrder.PORelease}" noDataText="{i18n>view.PurchaseOrder.placeholder}" growingScrollToLoad="false" growing="true">
+						<columns>
+							<Column id="ItemsTableColumnDESCRIPTION" hAlign="Left" minScreenWidth="Medium" demandPopin="true">
+								<header>
+									<Label text="{i18n>view.PurchaseOrder.DESCRIPTION}"/>
+								</header>
+							</Column>
+							<Column id="ItemsTableColumnREL_CODE" hAlign="Left" demandPopin="false">
+								<header>
+									<Label text="{i18n>view.PurchaseOrder.REL_CODE}"/>
+								</header>
+							</Column>
+							<Column id="ItemsTableColumnSTEXT" hAlign="Left" minScreenWidth="Medium" demandPopin="false">
+								<header>
+									<Label text="{i18n>view.PurchaseOrder.STEXT}"/>
+								</header>
+							</Column>
+							<Column id="ItemsTableColumnICON" hAlign="Center" minScreenWidth="Medium" demandPopin="true">
+								<header>
+									<Label text="{i18n>view.PurchaseOrder.ICON}"/>
+								</header>
+							</Column>
+						</columns>
+						<items>
+							<ColumnListItem>
+								<cells>
+									<ObjectIdentifier title="{Description}"/>
+									<!--<ObjectStatus icon="sap-icon://locked" text="{i18n>view.PurchaseOrder.blocked}"-->
+									<!--	visible="{parts : [{path : 'Blocked'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.commonFieldVisibilityTrigger'}"-->
+									<!--	state="Warning"/>-->
+									<ObjectIdentifier text="{RelCode}"/>
+									<ObjectIdentifier title="{Stext}" titlePress="onApproverPress" titleActive="true"/>
+									<ObjectIdentifier text="{path: 'Icon', formatter: 'ui.s2p.mm.purchorder.approve.MM_PO_APVExtension.util.conversion.getReleaseText'}"/>
+									<!--<core:Icon src="{path: 'Icon', formatter: 'ui.s2p.mm.purchorder.approve.MM_PO_APVExtension.util.conversion.getReleaseIcon'}" tooltip="{Icon}"/>-->
+									<!--<core:Icon src="sap-icon://attachment"/>	-->
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+					<!-- end of PO Relese Table (PurchaseOrderComments)  -->
+					<!--</content>-->
+				</IconTabFilter>
+				<IconTabFilter text="Add Comments" id="__filter0">
+				<content>
+				    <FeedInput id="__input0"/>
+				    <FeedListItem icon="sap-icon://personnel-view" sender="John Doe" text="Feed List Item text" info="Waiting for Approval" timestamp="Dec 02, 2012" id="__item5"/>
+				</content>
+				</IconTabFilter>
+			</items>
+		</IconTabBar>
+		<!--	 end of ToggleArea (PurchaseOrderToggleArea -->
+		<!--	 Item table (PurchaseOrderItems) -->
+		<Table class="detailControlPadding" id="itemsTable" items="{ItemDetails}" headerText="{parts : [{path : 'NumberOfItems'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.itemsTableHeader'}" noDataText="{i18n>view.PurchaseOrder.placeholder}" growingScrollToLoad="false" growing="true">
+			<columns>
+				<Column id="ItemsTableColumnDescription" hAlign="Left">
+					<header>
+						<Label text="{i18n>view.PurchaseOrder.descriptionLabel}"/>
+					</header>
+				</Column>
+				<Column id="ItemsTableColumnItemCategory" hAlign="Left" minScreenWidth="Medium" demandPopin="true">
+					<header>
+						<Label text="{i18n>view.PurchaseOrder.itemCategory}"/>
+					</header>
+				</Column>
+				<Column id="ItemsTableColumnQuantity" hAlign="Right" minScreenWidth="Medium" demandPopin="true">
+					<header>
+						<Label text="{i18n>view.PurchaseOrder.quantity}"/>
+					</header>
+				</Column>
+				<Column id="ItemsTableColumnSubtotal" hAlign="Right" minScreenWidth="Medium" demandPopin="true">
+					<header>
+						<Label text="{i18n>view.PurchaseOrder.subtotal}"/>
+					</header>
+				</Column>
+			</columns>
+			<items>
+				<ColumnListItem type="Navigation" press="navToItemDetails">
+					<cells>
+						<layout:VerticalLayout>
+							<ObjectIdentifier title="{Description}" badgeAttachments="{parts : [{path : 'NumberOfAttachments'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.commonCountVisibilityTrigger'}" badgeNotes="{parts : [{path : 'NumberOfNotes'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.commonCountVisibilityTrigger'}" people="false"/>
+							<ObjectStatus icon="sap-icon://locked" text="{i18n>view.PurchaseOrder.blocked}" visible="{parts : [{path : 'Blocked'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.commonFieldVisibilityTrigger'}" state="Warning"/>
+						</layout:VerticalLayout>
+						<Text text="{parts : [{path : 'ItemCategoryDescription'}, {path : 'ProductDetails/ItemType'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.itemCategoryFormatter'}"/>
+						<ObjectNumber numberUnit="{UnitDescription}" number="{parts : [{path : 'Quantity'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.formatNumber'}"/>
+						<ObjectNumber numberUnit="{parts : [{path : 'ItemCategory'}, {path: 'Currency'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.formatNumberUnitItemType'}" number="{parts : [{path : 'Value'}, {path : 'ItemCategory'}], formatter : 'ui.s2p.mm.purchorder.approve.util.Conversions.formatNumberItemType'}"/>
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>
+		<!--	 end of Item table (PurchaseOrderItems) -->
+		<footer>
+			<Bar id="detailFooter"/>
+		</footer>
+	</Page>
+</core:View>

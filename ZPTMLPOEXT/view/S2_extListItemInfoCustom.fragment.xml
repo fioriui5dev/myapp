@@ -1,0 +1,4 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m">
+	<!-- This extension point can be used to add fields to ObjectListItem -->
+	<ObjectAttribute id="POnumber1" text="{PoNumber}"/>
+</core:FragmentDefinition>

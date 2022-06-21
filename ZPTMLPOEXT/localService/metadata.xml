@@ -1,0 +1,687 @@
+<edmx:Edmx
+    xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+    xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+    xmlns:sap="http://www.sap.com/Protocols/SAPData" Version="1.0">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema
+            xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="ZPTML_PO_EXT_SRV" xml:lang="en" sap:schema-version="1">
+            <EntityType Name="Subscription" sap:semantics="subscriptions" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.String" Nullable="false" MaxLength="32" sap:label="Sub. ID" sap:creatable="false" sap:updatable="false" sap:filterable="false"/>
+                <Property Name="user" Type="Edm.String" MaxLength="12" m:FC_TargetPath="SyndicationAuthorName" m:FC_KeepInContent="false" sap:label="User Name" sap:creatable="false" sap:filterable="false"/>
+                <Property Name="updated" Type="Edm.DateTime" Precision="0" m:FC_TargetPath="SyndicationUpdated" m:FC_KeepInContent="false" sap:label="Time Stamp" sap:creatable="false" sap:filterable="false"/>
+                <Property Name="title" Type="Edm.String" MaxLength="255" m:FC_TargetPath="SyndicationTitle" m:FC_KeepInContent="false" sap:label="Title" sap:filterable="false"/>
+                <Property Name="deliveryAddress" Type="Edm.String" sap:label="Delivery Address" sap:filterable="false"/>
+                <Property Name="persistNotifications" Type="Edm.Boolean" sap:label="Persist Notification" sap:filterable="false"/>
+                <Property Name="collection" Type="Edm.String" MaxLength="40" sap:label="Collection" sap:filterable="false"/>
+                <Property Name="filter" Type="Edm.String" sap:label="Filter" sap:filterable="false"/>
+                <Property Name="select" Type="Edm.String" MaxLength="255" sap:label="Select" sap:filterable="false"/>
+                <Property Name="changeType" Type="Edm.String" MaxLength="30" sap:label="Change Type"/>
+            </EntityType>
+            <EntityType Name="Notification" sap:semantics="notifications" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.String" Nullable="false" MaxLength="32" sap:label="Notification ID"/>
+                <Property Name="collection" Type="Edm.String" MaxLength="40" sap:label="Collection"/>
+                <Property Name="title" Type="Edm.String" m:FC_TargetPath="SyndicationTitle" m:FC_KeepInContent="false" sap:label="Notif. Text"/>
+                <Property Name="updated" Type="Edm.DateTime" Precision="0" m:FC_TargetPath="SyndicationUpdated" m:FC_KeepInContent="false" sap:label="Time Stamp"/>
+                <Property Name="changeType" Type="Edm.String" MaxLength="30" sap:label="Change Type"/>
+                <Property Name="entriesOfInterest" Type="Edm.Int32" sap:label="No. of Entries"/>
+                <Property Name="recipient" Type="Edm.String" MaxLength="112" sap:label="Recipient" sap:creatable="false" sap:updatable="false"/>
+            </EntityType>
+            <EntityType Name="LaunchPage" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="key"/>
+                </Key>
+                <Property Name="key" Type="Edm.String" Nullable="false" MaxLength="32" sap:label="Scenario ID"/>
+                <Property Name="title" Type="Edm.String" MaxLength="255" sap:label="Scenario Name"/>
+                <Property Name="number" Type="Edm.Int32" sap:label="Number"/>
+                <Property Name="numberUnit" Type="Edm.String" MaxLength="10" sap:label="Character Field Length = 10"/>
+                <Property Name="info" Type="Edm.String" MaxLength="32" sap:label="Character field, length 32"/>
+                <Property Name="infoStatus" Type="Edm.String" MaxLength="32" sap:label="Character field, length 32"/>
+                <Property Name="icon" Type="Edm.String" MaxLength="32" sap:label="Character field, length 32"/>
+            </EntityType>
+            <EntityType Name="WorkflowTask" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="WorkitemID"/>
+                </Key>
+                <Property Name="WorkitemID" Type="Edm.String" Nullable="false" MaxLength="12" sap:label="ID"/>
+                <Property Name="TaskType" Type="Edm.String" MaxLength="14" sap:label="Org Management obj."/>
+                <Property Name="PoNumber" Type="Edm.String" MaxLength="10" sap:label="Purchasing Doc."/>
+                <Property Name="PoNumberFormatted" Type="Edm.String" MaxLength="10" sap:label="Character Field Length = 10"/>
+                <Property Name="WiCreatedAt" Type="Edm.DateTime" Precision="0" sap:label="Time Stamp"/>
+                <Property Name="ForwardedByID" Type="Edm.String" MaxLength="12" sap:label="User Name"/>
+                <Property Name="ForwardedByName" Type="Edm.String" MaxLength="40" sap:label="Char"/>
+                <Property Name="SubstitutingForID" Type="Edm.String" MaxLength="12" sap:label="User Name"/>
+                <Property Name="SubstitutingForName" Type="Edm.String" MaxLength="40" sap:label="Char"/>
+                <Property Name="CreatedByID" Type="Edm.String" MaxLength="12" sap:label="Created By"/>
+                <Property Name="CreatedByName" Type="Edm.String" MaxLength="40" sap:label="Char"/>
+                <Property Name="Value" Type="Edm.Decimal" Precision="15" Scale="14" sap:unit="Currency" sap:label="Target Value"/>
+                <Property Name="Currency" Type="Edm.String" MaxLength="5" sap:label="Currency" sap:semantics="currency-code"/>
+                <Property Name="SupplierID" Type="Edm.String" MaxLength="10" sap:label="Vendor"/>
+                <Property Name="SupplierName" Type="Edm.String" MaxLength="35" sap:label="Name"/>
+                <Property Name="ItemDescriptions" Type="Edm.String" sap:label="String"/>
+                <Property Name="SearchForText" Type="Edm.String" sap:label="String"/>
+                <NavigationProperty Name="HeaderDetails" Relationship="ZPTML_PO_EXT_SRV.HeaderDetails" FromRole="FromRole_HeaderDetails" ToRole="ToRole_HeaderDetails"/>
+            </EntityType>
+            <EntityType Name="HeaderDetail" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="PoNumber"/>
+                </Key>
+                <Property Name="HeaderInfo" Type="ZPTML_PO_EXT_SRV.HeaderInfo" Nullable="false"/>
+                <Property Name="WorkitemID" Type="Edm.String" MaxLength="12" sap:label="ID"/>
+                <Property Name="PoNumber" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Purchasing Doc."/>
+                <Property Name="PoNumberFormatted" Type="Edm.String" MaxLength="10" sap:label="Character Field Length = 10"/>
+                <Property Name="WiCreatedAt" Type="Edm.DateTime" Precision="0" sap:label="Time Stamp"/>
+                <Property Name="ForwardedByID" Type="Edm.String" MaxLength="12" sap:label="User Name"/>
+                <Property Name="ForwardedByName" Type="Edm.String" MaxLength="40" sap:label="Char"/>
+                <Property Name="SubstitutingForID" Type="Edm.String" MaxLength="12" sap:label="User Name"/>
+                <Property Name="SubstitutingForName" Type="Edm.String" MaxLength="40" sap:label="Char"/>
+                <Property Name="PaymentTerm" Type="Edm.String" MaxLength="4" sap:label="Payt Terms"/>
+                <Property Name="PaymentTermDescription" Type="Edm.String" sap:label="String"/>
+                <Property Name="Incoterm" Type="Edm.String" MaxLength="3" sap:label="Incoterms"/>
+                <Property Name="IncotermDescription" Type="Edm.String" MaxLength="30" sap:label="Description"/>
+                <Property Name="IncotermLocation" Type="Edm.String" MaxLength="28" sap:label="Incoterms 2"/>
+                <Property Name="CompanyCode" Type="Edm.String" MaxLength="4" sap:label="Company Code"/>
+                <Property Name="CompanyCodeDescription" Type="Edm.String" MaxLength="25" sap:label="Company Name"/>
+                <Property Name="CreatedByID" Type="Edm.String" MaxLength="12" sap:label="Created By"/>
+                <Property Name="CreatedByName" Type="Edm.String" MaxLength="255" sap:label="Char255"/>
+                <Property Name="NumberOfNotes" Type="Edm.Int32" sap:label="Number"/>
+                <Property Name="NumberOfAttachments" Type="Edm.Int32" sap:label="Number"/>
+                <Property Name="Value" Type="Edm.Decimal" Precision="15" Scale="14" sap:unit="Currency" sap:label="Target Value"/>
+                <Property Name="Currency" Type="Edm.String" MaxLength="5" sap:label="Currency" sap:semantics="currency-code"/>
+                <Property Name="SupplierID" Type="Edm.String" MaxLength="10" sap:label="Vendor"/>
+                <Property Name="SupplierName" Type="Edm.String" MaxLength="35" sap:label="Name"/>
+                <Property Name="NumberOfItems" Type="Edm.Int32" sap:label="Number"/>
+                <Property Name="Plant" Type="Edm.String" MaxLength="4" sap:label="Plant"/>
+                <Property Name="PlantName" Type="Edm.String" MaxLength="40" sap:label="Name"/>
+                <Property Name="DeliveryDate" Type="Edm.DateTime" Precision="0" sap:label="Delivery date"/>
+                <Property Name="DeliveryDateAlsoLater" Type="Edm.String" MaxLength="1" sap:label="Indicator"/>
+                <Property Name="OrderingAddress" Type="Edm.String" sap:label="Address"/>
+                <Property Name="CPDVendorName" Type="Edm.String" MaxLength="40" sap:label="Name"/>
+                <Property Name="PORELEASECOUNT" Type="Edm.Int32" sap:label="Number"/>
+                <Property Name="POCOMMENTSCOUNT" Type="Edm.Int32" sap:label="Number"/>
+                <NavigationProperty Name="ItemDetails" Relationship="ZPTML_PO_EXT_SRV.ItemDetails" FromRole="FromRole_ItemDetails" ToRole="ToRole_ItemDetails"/>
+                <NavigationProperty Name="Attachments" Relationship="ZPTML_PO_EXT_SRV.ItemAttachments" FromRole="FromRole_ItemAttachments" ToRole="ToRole_ItemAttachments"/>
+                <NavigationProperty Name="Notes" Relationship="ZPTML_PO_EXT_SRV.HeaderNotes" FromRole="FromRole_HeaderNotes" ToRole="ToRole_HeaderNotes"/>
+                <NavigationProperty Name="PDFView" Relationship="ZPTML_PO_EXT_SRV.PDFViews" FromRole="FromRole_PDFViews" ToRole="ToRole_PDFViews"/>
+                <NavigationProperty Name="PORelease" Relationship="ZPTML_PO_EXT_SRV.PORelease" FromRole="FromRole_PORelease" ToRole="ToRole_PORelease"/>
+                <NavigationProperty Name="POComments" Relationship="ZPTML_PO_EXT_SRV.POComments" FromRole="FromRole_POComments" ToRole="ToRole_POComments"/>
+                <NavigationProperty Name="POHeaderNote" Relationship="ZPTML_PO_EXT_SRV.PONote" FromRole="FromRole_PONote" ToRole="ToRole_PONote"/>
+                <NavigationProperty Name="POHeaderText" Relationship="ZPTML_PO_EXT_SRV.POText" FromRole="FromRole_POText" ToRole="ToRole_POText"/>
+            </EntityType>
+            <EntityType Name="ItemDetail" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ItemNumber"/>
+                    <PropertyRef Name="PoNumber"/>
+                </Key>
+                <Property Name="LimitDetails" Type="ZPTML_PO_EXT_SRV.LimitDetails" Nullable="false"/>
+                <Property Name="ProductDetails" Type="ZPTML_PO_EXT_SRV.ProductDetails" Nullable="false"/>
+                <Property Name="DeliveryAddress" Type="ZPTML_PO_EXT_SRV.DeliveryAddress" Nullable="false"/>
+                <Property Name="ItemNumber" Type="Edm.String" Nullable="false" MaxLength="5" sap:label="Item"/>
+                <Property Name="PoNumber" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Purchasing Doc."/>
+                <Property Name="ItemNumberFormatted" Type="Edm.String" MaxLength="5" sap:label="R/2 table"/>
+                <Property Name="PoNumberFormatted" Type="Edm.String" MaxLength="10" sap:label="Character Field Length = 10"/>
+                <Property Name="ItemCategory" Type="Edm.String" MaxLength="1" sap:label="Item category"/>
+                <Property Name="ItemCategoryDescription" Type="Edm.String" MaxLength="20" sap:label="Text for ItCat."/>
+                <Property Name="Description" Type="Edm.String" MaxLength="40" sap:label="Short Text"/>
+                <Property Name="Blocked" Type="Edm.String" MaxLength="1" sap:label="Single-Character Flag"/>
+                <Property Name="Unit" Type="Edm.String" MaxLength="3" sap:label="Order Unit" sap:semantics="unit-of-measure"/>
+                <Property Name="UnitDescription" Type="Edm.String" MaxLength="30" sap:label="Unit text"/>
+                <Property Name="Quantity" Type="Edm.String" sap:unit="Unit" sap:label="String"/>
+                <Property Name="Value" Type="Edm.Decimal" Precision="13" Scale="13" sap:unit="Currency" sap:label="Total Value"/>
+                <Property Name="Currency" Type="Edm.String" MaxLength="5" sap:label="Currency" sap:semantics="currency-code"/>
+                <Property Name="PricePerUnit" Type="Edm.Decimal" Precision="11" Scale="11" sap:unit="CurrencyForPPU" sap:label="Net Price"/>
+                <Property Name="CurrencyForPPU" Type="Edm.String" MaxLength="5" sap:label="Currency" sap:semantics="currency-code"/>
+                <Property Name="QuantityForPPU" Type="Edm.String" sap:unit="UnitforPPU" sap:label="String"/>
+                <Property Name="UnitForPPU" Type="Edm.String" MaxLength="3" sap:label="Unit of Measure" sap:semantics="unit-of-measure"/>
+                <Property Name="UnitForPPUDescription" Type="Edm.String" MaxLength="30" sap:label="Unit text"/>
+                <Property Name="DeliveryDate" Type="Edm.DateTime" Precision="0" sap:label="Delivery date"/>
+                <Property Name="DeliveryDateAlsoLater" Type="Edm.String" MaxLength="1" sap:label="Indicator"/>
+                <Property Name="Incoterm" Type="Edm.String" MaxLength="3" sap:label="Incoterms"/>
+                <Property Name="IncotermDescription" Type="Edm.String" MaxLength="30" sap:label="Description"/>
+                <Property Name="IncotermLocation" Type="Edm.String" MaxLength="28" sap:label="Incoterms 2"/>
+                <Property Name="NumberOfNotes" Type="Edm.Int32" sap:label="Number"/>
+                <Property Name="NumberOfAttachments" Type="Edm.Int32" sap:label="Number"/>
+                <Property Name="NumberServiceLines" Type="Edm.Int32" sap:unit="Currency" sap:label="Number"/>
+                <NavigationProperty Name="ServiceLines" Relationship="ZPTML_PO_EXT_SRV.ServiceLines" FromRole="FromRole_ServiceLines" ToRole="ToRole_ServiceLines"/>
+                <NavigationProperty Name="Limits" Relationship="ZPTML_PO_EXT_SRV.Limits" FromRole="FromRole_Limits" ToRole="ToRole_Limits"/>
+                <NavigationProperty Name="PricingConditions" Relationship="ZPTML_PO_EXT_SRV.PricingConditions" FromRole="FromRole_PricingConditions" ToRole="ToRole_PricingConditions"/>
+                <NavigationProperty Name="Attachments" Relationship="ZPTML_PO_EXT_SRV.HeaderAttachments" FromRole="FromRole_HeaderAttachments" ToRole="ToRole_HeaderAttachments"/>
+                <NavigationProperty Name="Notes" Relationship="ZPTML_PO_EXT_SRV.ItemNotes" FromRole="FromRole_ItemNotes" ToRole="ToRole_ItemNotes"/>
+                <NavigationProperty Name="Accountings" Relationship="ZPTML_PO_EXT_SRV.Accountings" FromRole="FromRole_Accountings" ToRole="ToRole_Accountings"/>
+                <NavigationProperty Name="Components" Relationship="ZPTML_PO_EXT_SRV.Components" FromRole="FromRole_Components" ToRole="ToRole_Components"/>
+            </EntityType>
+            <EntityType Name="UserDetails" m:HasStream="true" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="UserID"/>
+                </Key>
+                <Property Name="UserID" Type="Edm.String" Nullable="false" MaxLength="12" sap:label="User"/>
+                <Property Name="FirstName" Type="Edm.String" MaxLength="40" sap:label="First name"/>
+                <Property Name="LastName" Type="Edm.String" MaxLength="40" sap:label="Last name"/>
+                <Property Name="FullName" Type="Edm.String" MaxLength="80" sap:label="Full Name"/>
+                <Property Name="Department" Type="Edm.String" MaxLength="40" sap:label="Department"/>
+                <Property Name="EMail" Type="Edm.String" MaxLength="241" sap:label="E-Mail Address" sap:semantics="email"/>
+                <Property Name="WorkPhone" Type="Edm.String" MaxLength="30" sap:label="Telephone" sap:semantics="tel;type=cell"/>
+                <Property Name="MobilePhone" Type="Edm.String" MaxLength="30" sap:label="Telephone" sap:semantics="tel;type=work"/>
+                <Property Name="CompanyName" Type="Edm.String" MaxLength="42" sap:label="Company"/>
+                <Property Name="AddressString" Type="Edm.String" sap:label="Address"/>
+                <Property Name="MimeType" Type="Edm.String" MaxLength="128" sap:label="MIME Type"/>
+            </EntityType>
+            <EntityType Name="SupplierDetail" m:HasStream="true" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="SupplierID"/>
+                </Key>
+                <Property Name="SupplierID" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Vendor"/>
+                <Property Name="SupplierName" Type="Edm.String" MaxLength="35" sap:label="Name"/>
+                <Property Name="AddressString" Type="Edm.String" sap:label="Address"/>
+                <Property Name="WorkPhone" Type="Edm.String" MaxLength="30" sap:label="Telephone no."/>
+                <Property Name="Fax" Type="Edm.String" MaxLength="30" sap:label="Fax number"/>
+                <Property Name="EMail" Type="Edm.String" MaxLength="241" sap:label="E-Mail Address"/>
+                <Property Name="WebSite" Type="Edm.String" MaxLength="2048" sap:label="URI"/>
+                <Property Name="MimeType" Type="Edm.String" MaxLength="128" sap:label="MIME Type"/>
+                <NavigationProperty Name="SupplierContacts" Relationship="ZPTML_PO_EXT_SRV.SupplierContacts" FromRole="FromRole_SupplierContacts" ToRole="ToRole_SupplierContacts"/>
+            </EntityType>
+            <EntityType Name="ServiceLine" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="PoNumber"/>
+                    <PropertyRef Name="ItemNumber"/>
+                    <PropertyRef Name="ServiceLineNumber"/>
+                </Key>
+                <Property Name="PoNumber" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Purchasing Doc."/>
+                <Property Name="ItemNumber" Type="Edm.String" Nullable="false" MaxLength="5" sap:label="Item"/>
+                <Property Name="ServiceLineNumber" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Line Number"/>
+                <Property Name="ServiceID" Type="Edm.String" MaxLength="18" sap:label="Service"/>
+                <Property Name="Description" Type="Edm.String" MaxLength="40" sap:label="Short Text 1"/>
+                <Property Name="LongDescription" Type="Edm.String" sap:label="String"/>
+                <Property Name="Quantity" Type="Edm.String" sap:unit="Unit" sap:label="String"/>
+                <Property Name="Unit" Type="Edm.String" MaxLength="3" sap:label="Base Unit" sap:semantics="unit-of-measure"/>
+                <Property Name="UnitDescription" Type="Edm.String" MaxLength="30" sap:label="Unit text"/>
+                <Property Name="Value" Type="Edm.Decimal" Precision="15" Scale="14" sap:unit="Currency" sap:label="Net Value"/>
+                <Property Name="Currency" Type="Edm.String" MaxLength="5" sap:label="Currency" sap:semantics="currency-code"/>
+                <Property Name="QuantityForPPU" Type="Edm.String" sap:unit="UnitForPPU" sap:label="String"/>
+                <Property Name="PricePerUnit" Type="Edm.Decimal" Precision="15" Scale="14" sap:unit="CurrencyForPPU" sap:label="Net Value"/>
+                <Property Name="UnitForPPU" Type="Edm.String" MaxLength="3" sap:label="Base Unit" sap:semantics="unit-of-measure"/>
+                <Property Name="UnitForPPUDescription" Type="Edm.String" MaxLength="30" sap:label="Unit text"/>
+                <Property Name="CurrencyForPPU" Type="Edm.String" MaxLength="5" sap:label="Currency" sap:semantics="currency-code"/>
+                <NavigationProperty Name="Accountings" Relationship="ZPTML_PO_EXT_SRV.ServiceLineAccountings" FromRole="FromRole_ServiceLineAccountings" ToRole="ToRole_ServiceLineAccountings"/>
+            </EntityType>
+            <EntityType Name="Limit" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="PoNumber"/>
+                    <PropertyRef Name="ItemNumber"/>
+                    <PropertyRef Name="LimitDescription"/>
+                </Key>
+                <Property Name="PoNumber" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Purchasing Doc."/>
+                <Property Name="ItemNumber" Type="Edm.String" Nullable="false" MaxLength="5" sap:label="Item"/>
+                <Property Name="LimitDescription" Type="Edm.String" Nullable="false" MaxLength="40" sap:label="Short Text"/>
+                <Property Name="IsValueUnLimited" Type="Edm.String" MaxLength="1" sap:label="No Limit"/>
+                <Property Name="ValueLimit" Type="Edm.String" MaxLength="13" sap:unit="Currency" sap:label="Overall Limit"/>
+                <Property Name="ExpectedValue" Type="Edm.String" MaxLength="13" sap:unit="Currency" sap:label="Expected Value"/>
+                <Property Name="Currency" Type="Edm.String" MaxLength="5" sap:label="Currency" sap:semantics="currency-code"/>
+                <NavigationProperty Name="Accountings" Relationship="ZPTML_PO_EXT_SRV.LimitAccountings" FromRole="FromRole_LimitAccountings" ToRole="ToRole_LimitAccountings"/>
+            </EntityType>
+            <EntityType Name="PricingCondition" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="PoNumber"/>
+                    <PropertyRef Name="ItemNumber"/>
+                    <PropertyRef Name="PricingConditionType"/>
+                    <PropertyRef Name="PricingConditionCount"/>
+                </Key>
+                <Property Name="PoNumber" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Purchasing Doc."/>
+                <Property Name="ItemNumber" Type="Edm.String" Nullable="false" MaxLength="5" sap:label="Item"/>
+                <Property Name="PricingConditionType" Type="Edm.String" Nullable="false" MaxLength="4" sap:label="Condition Type"/>
+                <Property Name="PricingConditionCount" Type="Edm.String" Nullable="false" MaxLength="2" sap:label="Counter"/>
+                <Property Name="Description" Type="Edm.String" MaxLength="20" sap:label="Description"/>
+                <Property Name="Value" Type="Edm.Decimal" Precision="13" Scale="13" sap:unit="Currency" sap:label="Condition value"/>
+                <Property Name="Currency" Type="Edm.String" MaxLength="5" sap:label="Currency" sap:semantics="currency-code"/>
+            </EntityType>
+            <EntityType Name="ForwardingAgent" m:HasStream="true" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="UserId"/>
+                </Key>
+                <Property Name="UserId" Type="Edm.String" Nullable="false" MaxLength="12" sap:label="User Name"/>
+                <Property Name="SearchForText" Type="Edm.String" sap:label="String"/>
+                <Property Name="FullName" Type="Edm.String" MaxLength="40" sap:label="Char"/>
+                <Property Name="EMail" Type="Edm.String" MaxLength="241" sap:label="E-Mail Address"/>
+                <Property Name="Department" Type="Edm.String" MaxLength="40" sap:label="Department"/>
+                <Property Name="Building" Type="Edm.String" MaxLength="10" sap:label="Building code"/>
+                <Property Name="Roomnumber" Type="Edm.String" MaxLength="10" sap:label="Room Number"/>
+                <Property Name="TotalNumUsers" Type="Edm.Int32" sap:label="Number"/>
+                <Property Name="MimeType" Type="Edm.String" MaxLength="128" sap:label="MIME Type"/>
+            </EntityType>
+            <EntityType Name="Attachment" m:HasStream="true" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="AttachmentGuid"/>
+                </Key>
+                <Property Name="AttachmentGuid" Type="Edm.String" Nullable="false" MaxLength="46" sap:label="Folder Entry ID (Obj+Fol+Forwarder Name)"/>
+                <Property Name="PoNumber" Type="Edm.String" MaxLength="10" sap:label="Object ID"/>
+                <Property Name="ItemNumber" Type="Edm.String" MaxLength="5" sap:label="Line ID"/>
+                <Property Name="Description" Type="Edm.String" MaxLength="40" sap:label="Description"/>
+                <Property Name="FileName" Type="Edm.String" MaxLength="255" sap:label="Component name"/>
+                <Property Name="MimeType" Type="Edm.String" MaxLength="128" sap:label="MIME type"/>
+                <Property Name="FileSize" Type="Edm.String" MaxLength="12" sap:label="Size of SAPoffice Document (for API1)"/>
+                <Property Name="CreatedByID" Type="Edm.String" MaxLength="12" sap:label="User Name"/>
+                <Property Name="CreatedByName" Type="Edm.String" MaxLength="40" sap:label="Char"/>
+                <Property Name="CreatedAt" Type="Edm.DateTime" Precision="0" sap:label="Time Stamp"/>
+            </EntityType>
+            <EntityType Name="Note" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="PoNumber"/>
+                    <PropertyRef Name="ItemNumber"/>
+                    <PropertyRef Name="Type"/>
+                    <PropertyRef Name="NoteID"/>
+                </Key>
+                <Property Name="PoNumber" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Object ID"/>
+                <Property Name="ItemNumber" Type="Edm.String" Nullable="false" MaxLength="5" sap:label="Line ID"/>
+                <Property Name="Type" Type="Edm.String" Nullable="false" MaxLength="4" sap:label="Text ID"/>
+                <Property Name="NoteID" Type="Edm.String" Nullable="false" MaxLength="3" sap:label="3-Byte field"/>
+                <Property Name="TypeDescription" Type="Edm.String" MaxLength="30" sap:label="Description"/>
+                <Property Name="CreatedByID" Type="Edm.String" MaxLength="12" sap:label="User Name"/>
+                <Property Name="CreatedByName" Type="Edm.String" MaxLength="40" sap:label="Char"/>
+                <Property Name="CreatedAt" Type="Edm.DateTime" Precision="0" sap:label="Time Stamp"/>
+                <Property Name="Text" Type="Edm.String" sap:label="String"/>
+                <Property Name="NoteIsApproverNote" Type="Edm.Boolean" sap:label="Indicator"/>
+            </EntityType>
+            <EntityType Name="SupplierContact" m:HasStream="true" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="SupplierID"/>
+                    <PropertyRef Name="ContactID"/>
+                </Key>
+                <Property Name="SupplierID" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Vendor"/>
+                <Property Name="ContactID" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Contact Person"/>
+                <Property Name="ContactName" Type="Edm.String" MaxLength="35" sap:label="Name"/>
+                <Property Name="Department" Type="Edm.String" MaxLength="20" sap:label="Description"/>
+                <Property Name="Function" Type="Edm.String" MaxLength="20" sap:label="Description"/>
+                <Property Name="MobilePhone" Type="Edm.String" MaxLength="30" sap:label="Telephone no."/>
+                <Property Name="WorkPhone" Type="Edm.String" MaxLength="30" sap:label="Telephone no."/>
+                <Property Name="EMail" Type="Edm.String" MaxLength="241" sap:label="E-Mail Address"/>
+                <Property Name="CompanyName" Type="Edm.String" MaxLength="35" sap:label="Name"/>
+                <Property Name="AddressString" Type="Edm.String" MaxLength="80" sap:label="Short form of the formatted address for the data medium"/>
+                <Property Name="MimeType" Type="Edm.String" MaxLength="128" sap:label="MIME Type"/>
+            </EntityType>
+            <EntityType Name="Accounting" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="PoNumber"/>
+                    <PropertyRef Name="ItemNumber"/>
+                    <PropertyRef Name="AccountLineNumber"/>
+                </Key>
+                <Property Name="PoNumber" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Purchasing Doc."/>
+                <Property Name="ItemNumber" Type="Edm.String" Nullable="false" MaxLength="5" sap:label="Item"/>
+                <Property Name="AccountLineNumber" Type="Edm.String" Nullable="false" MaxLength="22" sap:label="x"/>
+                <Property Name="ServiceLineNumber" Type="Edm.String" MaxLength="10" sap:label="Line Number"/>
+                <Property Name="AccountCategory" Type="Edm.String" MaxLength="1" sap:label="Consumption"/>
+                <Property Name="AccountCategoryDescription" Type="Edm.String" MaxLength="20" sap:label="Description"/>
+                <Property Name="AccountNumber" Type="Edm.String" MaxLength="24" sap:label="Text 24"/>
+                <Property Name="AccountDescription" Type="Edm.String" MaxLength="50" sap:label="Explanation"/>
+                <Property Name="DistributionPercentage" Type="Edm.String" MaxLength="5" sap:label="R/2 table"/>
+                <Property Name="GlAccountNumber" Type="Edm.String" MaxLength="10" sap:label="G/L Account"/>
+                <Property Name="GlAccountDescription" Type="Edm.String" MaxLength="50" sap:label="Long Text"/>
+                <Property Name="CostCentre" Type="Edm.String" MaxLength="10" sap:label="Cost Center"/>
+                <Property Name="CostCentreIndicator" Type="Edm.String" MaxLength="1" sap:label="Single-Character Flag"/>
+                <Property Name="CostCentreDescription" Type="Edm.String" MaxLength="50" sap:label="Explanation"/>
+                <Property Name="WBSElement" Type="Edm.String" MaxLength="24" sap:label="Text 24"/>
+                <Property Name="WBSElementIndicator" Type="Edm.String" MaxLength="1" sap:label="Single-Character Flag"/>
+                <Property Name="WBSElementDescription" Type="Edm.String" MaxLength="50" sap:label="Explanation"/>
+                <Property Name="Network" Type="Edm.String" MaxLength="12" sap:label="Network"/>
+                <Property Name="NetworkIndicator" Type="Edm.String" MaxLength="1" sap:label="Single-Character Flag"/>
+                <Property Name="NetworkDescription" Type="Edm.String" MaxLength="50" sap:label="Explanation"/>
+                <Property Name="Order" Type="Edm.String" MaxLength="12" sap:label="Order"/>
+                <Property Name="OrderIndicator" Type="Edm.String" MaxLength="1" sap:label="Single-Character Flag"/>
+                <Property Name="OrderDescription" Type="Edm.String" MaxLength="50" sap:label="Explanation"/>
+                <Property Name="SalesOrder" Type="Edm.String" MaxLength="10" sap:label="Sales Document"/>
+                <Property Name="SalesOrderItem" Type="Edm.String" MaxLength="6" sap:label="Sales doc. item"/>
+                <Property Name="SalesOrderScheduleLine" Type="Edm.String" MaxLength="4" sap:label="Schedule Line"/>
+                <Property Name="SalesOrderIndicator" Type="Edm.String" MaxLength="1" sap:label="Single-Character Flag"/>
+                <Property Name="SalesOrderDescription" Type="Edm.String" MaxLength="50" sap:label="Explanation"/>
+                <Property Name="Asset" Type="Edm.String" MaxLength="12" sap:label="Asset"/>
+                <Property Name="AssetSubNumber" Type="Edm.String" MaxLength="4" sap:label="Sub-number"/>
+                <Property Name="AssetIndicator" Type="Edm.String" MaxLength="1" sap:label="Single-Character Flag"/>
+                <Property Name="AssetDescription" Type="Edm.String" MaxLength="50" sap:label="Explanation"/>
+                <Property Name="ProfitCenter" Type="Edm.String" MaxLength="10" sap:label="Profit Center"/>
+                <Property Name="ProfitCenterDescription" Type="Edm.String" MaxLength="50" sap:label="Explanation"/>
+            </EntityType>
+            <EntityType Name="Component" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="PoNumber"/>
+                    <PropertyRef Name="ItemNumber"/>
+                    <PropertyRef Name="ScheduleLine"/>
+                    <PropertyRef Name="ComponentID"/>
+                </Key>
+                <Property Name="PoNumber" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Object ID"/>
+                <Property Name="ItemNumber" Type="Edm.String" Nullable="false" MaxLength="5" sap:label="Line ID"/>
+                <Property Name="ScheduleLine" Type="Edm.String" Nullable="false" MaxLength="4" sap:label="Schedule Line"/>
+                <Property Name="ComponentID" Type="Edm.String" Nullable="false" MaxLength="4" sap:label="Item no."/>
+                <Property Name="Material" Type="Edm.String" MaxLength="18" sap:label="Material"/>
+                <Property Name="Description" Type="Edm.String" MaxLength="40" sap:label="Description"/>
+                <Property Name="Quantity" Type="Edm.Decimal" Precision="13" Scale="13" sap:unit="BaseUnitCode" sap:label="Requirement qty"/>
+                <Property Name="BaseUnitCode" Type="Edm.String" MaxLength="3" sap:label="Base Unit" sap:semantics="unit-of-measure"/>
+                <Property Name="BaseUnitDescription" Type="Edm.String" MaxLength="30" sap:label="Unit text"/>
+            </EntityType>
+            <EntityType Name="POCOMMENTS" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Uname"/>
+                    <PropertyRef Name="Ebeln"/>
+                    <PropertyRef Name="Comid"/>
+                </Key>
+                <Property Name="Uname" Type="Edm.String" Nullable="false" MaxLength="12" sap:label="User Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ebeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Purchasing Doc." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Comid" Type="Edm.Int32" Nullable="false" sap:label="COMID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Username" Type="Edm.String" Nullable="false" MaxLength="80" sap:label="Full Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Comdate" Type="Edm.DateTime" Nullable="false" Precision="7" sap:label="Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Comtime" Type="Edm.Time" Nullable="false" Precision="0" sap:label="Time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Comtext" Type="Edm.String" Nullable="false" sap:label="COMTEXT" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Action" Type="Edm.String" Nullable="false" sap:label="ACTION" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="PORELEASE" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Ebeln"/>
+                    <PropertyRef Name="RelCode"/>
+                </Key>
+                <Property Name="Ebeln" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Purchasing Doc." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="RelCode" Type="Edm.String" Nullable="false" MaxLength="2" sap:label="Release code" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Description" Type="Edm.String" Nullable="false" MaxLength="20" sap:label="Description" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Icon" Type="Edm.String" Nullable="false" MaxLength="30" sap:label="Name of an Icon" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Function" Type="Edm.String" Nullable="false" MaxLength="30" sap:label="Name of an Icon" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Stext" Type="Edm.String" Nullable="false" MaxLength="40" sap:label="Processor" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="PDFVIEW" m:HasStream="true" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Title"/>
+                    <PropertyRef Name="Ebeln"/>
+                </Key>
+                <Property Name="Title" Type="Edm.String" Nullable="false" sap:label="TITLE" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Ebeln" Type="Edm.String" Nullable="false" sap:label="EBELN" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Contenttype" Type="Edm.String" Nullable="false" sap:label="CONTENTTYPE" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="POHeaderText" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ObjectId"/>
+                    <PropertyRef Name="ObjectLine"/>
+                    <PropertyRef Name="NoteId"/>
+                    <PropertyRef Name="Type"/>
+                </Key>
+                <Property Name="ObjectId" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Object ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ObjectLine" Type="Edm.String" Nullable="false" MaxLength="5" sap:label="Line ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="NoteId" Type="Edm.String" Nullable="false" MaxLength="3" sap:label="3-Byte field" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Type" Type="Edm.String" Nullable="false" MaxLength="4" sap:label="Text ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="TypeDescr" Type="Edm.String" Nullable="false" MaxLength="30" sap:label="Description" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CreatedById" Type="Edm.String" Nullable="false" MaxLength="12" sap:label="User Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CreatedByName" Type="Edm.String" Nullable="false" MaxLength="40" sap:label="Char" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CreatedAt" Type="Edm.DateTime" Nullable="false" Precision="0" sap:label="Time Stamp" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Text" Type="Edm.String" Nullable="false" sap:label="String" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="NoteIsApproverNote" Type="Edm.Boolean" Nullable="false" sap:label="Indicator" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="DummyNotesIncl" Type="Edm.String" Nullable="false" MaxLength="1" sap:label="Dummy function in length 1" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="POHeaderNote" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ObjectId"/>
+                    <PropertyRef Name="ObjectLine"/>
+                    <PropertyRef Name="NoteId"/>
+                    <PropertyRef Name="Type"/>
+                </Key>
+                <Property Name="ObjectId" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Object ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="ObjectLine" Type="Edm.String" Nullable="false" MaxLength="5" sap:label="Line ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="NoteId" Type="Edm.String" Nullable="false" MaxLength="3" sap:label="3-Byte field" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Type" Type="Edm.String" Nullable="false" MaxLength="4" sap:label="Text ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="TypeDescr" Type="Edm.String" Nullable="false" MaxLength="30" sap:label="Description" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CreatedById" Type="Edm.String" Nullable="false" MaxLength="12" sap:label="User Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CreatedByName" Type="Edm.String" Nullable="false" MaxLength="40" sap:label="Char" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CreatedAt" Type="Edm.DateTime" Nullable="false" Precision="0" sap:label="Time Stamp" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Text" Type="Edm.String" Nullable="false" sap:label="String" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="NoteIsApproverNote" Type="Edm.Boolean" Nullable="false" sap:label="Indicator" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="DummyNotesIncl" Type="Edm.String" Nullable="false" MaxLength="1" sap:label="Dummy function in length 1" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <ComplexType Name="HeaderInfo">
+                <Property Name="AccountCategoryDescription" Type="Edm.String" MaxLength="20" sap:label="Name"/>
+                <Property Name="AccountNumber" Type="Edm.String" MaxLength="24" sap:label="Text 24"/>
+                <Property Name="AccountDescription" Type="Edm.String" MaxLength="50" sap:label="Explanation"/>
+                <Property Name="GlAccountNumber" Type="Edm.String" MaxLength="10" sap:label="G/L Account"/>
+                <Property Name="GlAccountDescription" Type="Edm.String" MaxLength="50" sap:label="Long Text"/>
+                <Property Name="CumulatedAccountingTypeCode" Type="Edm.String" MaxLength="1" sap:label="Acc.TypeCode"/>
+                <Property Name="CumulatedAccountingTypeCodeName" Type="Edm.String" MaxLength="60" sap:label="Short text"/>
+                <Property Name="CostCentre" Type="Edm.String" MaxLength="10" sap:label="Cost Center"/>
+                <Property Name="CostCentreIndicator" Type="Edm.String" MaxLength="1" sap:label="Single-Character Flag"/>
+                <Property Name="CostCentreDescription" Type="Edm.String" MaxLength="50" sap:label="Explanation"/>
+                <Property Name="WBSElement" Type="Edm.String" MaxLength="24" sap:label="Text 24"/>
+                <Property Name="WBSElementIndicator" Type="Edm.String" MaxLength="1" sap:label="Single-Character Flag"/>
+                <Property Name="WBSElementDescription" Type="Edm.String" MaxLength="50" sap:label="Explanation"/>
+                <Property Name="Network" Type="Edm.String" MaxLength="12" sap:label="Network"/>
+                <Property Name="NetworkIndicator" Type="Edm.String" MaxLength="1" sap:label="Single-Character Flag"/>
+                <Property Name="NetworkDescription" Type="Edm.String" MaxLength="50" sap:label="Explanation"/>
+                <Property Name="Order" Type="Edm.String" MaxLength="12" sap:label="Order"/>
+                <Property Name="OrderIndicator" Type="Edm.String" MaxLength="1" sap:label="Single-Character Flag"/>
+                <Property Name="OrderDescription" Type="Edm.String" MaxLength="50" sap:label="Explanation"/>
+                <Property Name="SalesOrder" Type="Edm.String" MaxLength="10" sap:label="Sales Document"/>
+                <Property Name="SalesOrderItem" Type="Edm.String" MaxLength="6" sap:label="Sales doc. item"/>
+                <Property Name="SalesOrderScheduleLine" Type="Edm.String" MaxLength="4" sap:label="Schedule Line"/>
+                <Property Name="SalesOrderIndicator" Type="Edm.String" MaxLength="1" sap:label="Single-Character Flag"/>
+                <Property Name="SalesOrderDescription" Type="Edm.String" MaxLength="50" sap:label="Explanation"/>
+                <Property Name="Asset" Type="Edm.String" MaxLength="12" sap:label="Asset"/>
+                <Property Name="AssetSubNumber" Type="Edm.String" MaxLength="4" sap:label="Sub-number"/>
+                <Property Name="AssetIndicator" Type="Edm.String" MaxLength="1" sap:label="Single-Character Flag"/>
+                <Property Name="AssetDescription" Type="Edm.String" MaxLength="50" sap:label="Explanation"/>
+                <Property Name="ProfitCenter" Type="Edm.String" MaxLength="10" sap:label="Profit Center"/>
+                <Property Name="ProfitCenterDescription" Type="Edm.String" MaxLength="50" sap:label="Explanation"/>
+            </ComplexType>
+            <ComplexType Name="LimitDetails">
+                <Property Name="LimitDescription" Type="Edm.String" MaxLength="40" sap:label="Short Text"/>
+                <Property Name="IsValueUnLimited" Type="Edm.String" MaxLength="1" sap:label="No Limit"/>
+                <Property Name="ValueLimit" Type="Edm.Decimal" Precision="13" Scale="13" sap:unit="Currency" sap:label="Overall Limit"/>
+                <Property Name="ExpectedValue" Type="Edm.Decimal" Precision="13" Scale="13" sap:unit="Currency" sap:label="Expected Value"/>
+                <Property Name="Currency" Type="Edm.String" MaxLength="5" sap:label="Currency" sap:semantics="currency-code"/>
+            </ComplexType>
+            <ComplexType Name="ProductDetails">
+                <Property Name="ItemType" Type="Edm.String" MaxLength="1" sap:label="Item Category"/>
+                <Property Name="MaterialID" Type="Edm.String" MaxLength="18" sap:label="Material"/>
+                <Property Name="MaterialGroupDescription" Type="Edm.String" MaxLength="20" sap:label="Material Group"/>
+                <Property Name="MaterialGroup" Type="Edm.String" MaxLength="9" sap:label="Material Group"/>
+            </ComplexType>
+            <ComplexType Name="DeliveryAddress">
+                <Property Name="Plant" Type="Edm.String" MaxLength="4" sap:label="Plant"/>
+                <Property Name="PlantName" Type="Edm.String" MaxLength="40" sap:label="Name"/>
+                <Property Name="CustomerId" Type="Edm.String" MaxLength="10" sap:label="Customer"/>
+                <Property Name="CustomerName" Type="Edm.String" MaxLength="40" sap:label="Name"/>
+                <Property Name="AddressString" Type="Edm.String" sap:label="String"/>
+            </ComplexType>
+            <ComplexType Name="ActionResult">
+                <Property Name="ActionSuccessful" Type="Edm.String" MaxLength="1" sap:label="X Flag"/>
+                <Property Name="Message" Type="Edm.String" MaxLength="255" sap:label="Char255"/>
+                <Property Name="MsgToUsr" Type="Edm.String" sap:label="String"/>
+            </ComplexType>
+            <Association Name="ServiceLineAccountings" sap:content-version="1">
+                <End Type="ZPTML_PO_EXT_SRV.ServiceLine" Multiplicity="1" Role="FromRole_ServiceLineAccountings"/>
+                <End Type="ZPTML_PO_EXT_SRV.Accounting" Multiplicity="*" Role="ToRole_ServiceLineAccountings"/>
+            </Association>
+            <Association Name="HeaderDetails" sap:content-version="1">
+                <End Type="ZPTML_PO_EXT_SRV.WorkflowTask" Multiplicity="1" Role="FromRole_HeaderDetails"/>
+                <End Type="ZPTML_PO_EXT_SRV.HeaderDetail" Multiplicity="1" Role="ToRole_HeaderDetails"/>
+            </Association>
+            <Association Name="ServiceLines" sap:content-version="1">
+                <End Type="ZPTML_PO_EXT_SRV.ItemDetail" Multiplicity="1" Role="FromRole_ServiceLines"/>
+                <End Type="ZPTML_PO_EXT_SRV.ServiceLine" Multiplicity="*" Role="ToRole_ServiceLines"/>
+            </Association>
+            <Association Name="Limits" sap:content-version="1">
+                <End Type="ZPTML_PO_EXT_SRV.ItemDetail" Multiplicity="1" Role="FromRole_Limits"/>
+                <End Type="ZPTML_PO_EXT_SRV.Limit" Multiplicity="*" Role="ToRole_Limits"/>
+            </Association>
+            <Association Name="PricingConditions" sap:content-version="1">
+                <End Type="ZPTML_PO_EXT_SRV.ItemDetail" Multiplicity="1" Role="FromRole_PricingConditions"/>
+                <End Type="ZPTML_PO_EXT_SRV.PricingCondition" Multiplicity="*" Role="ToRole_PricingConditions"/>
+            </Association>
+            <Association Name="HeaderAttachments" sap:content-version="1">
+                <End Type="ZPTML_PO_EXT_SRV.ItemDetail" Multiplicity="1" Role="FromRole_HeaderAttachments"/>
+                <End Type="ZPTML_PO_EXT_SRV.Attachment" Multiplicity="*" Role="ToRole_HeaderAttachments"/>
+            </Association>
+            <Association Name="ItemNotes" sap:content-version="1">
+                <End Type="ZPTML_PO_EXT_SRV.ItemDetail" Multiplicity="1" Role="FromRole_ItemNotes"/>
+                <End Type="ZPTML_PO_EXT_SRV.Note" Multiplicity="*" Role="ToRole_ItemNotes"/>
+            </Association>
+            <Association Name="Accountings" sap:content-version="1">
+                <End Type="ZPTML_PO_EXT_SRV.ItemDetail" Multiplicity="1" Role="FromRole_Accountings"/>
+                <End Type="ZPTML_PO_EXT_SRV.Accounting" Multiplicity="*" Role="ToRole_Accountings"/>
+            </Association>
+            <Association Name="Components" sap:content-version="1">
+                <End Type="ZPTML_PO_EXT_SRV.ItemDetail" Multiplicity="1" Role="FromRole_Components"/>
+                <End Type="ZPTML_PO_EXT_SRV.Component" Multiplicity="*" Role="ToRole_Components"/>
+            </Association>
+            <Association Name="SupplierContacts" sap:content-version="1">
+                <End Type="ZPTML_PO_EXT_SRV.SupplierDetail" Multiplicity="1" Role="FromRole_SupplierContacts"/>
+                <End Type="ZPTML_PO_EXT_SRV.SupplierContact" Multiplicity="*" Role="ToRole_SupplierContacts"/>
+            </Association>
+            <Association Name="LimitAccountings" sap:content-version="1">
+                <End Type="ZPTML_PO_EXT_SRV.Limit" Multiplicity="1" Role="FromRole_LimitAccountings"/>
+                <End Type="ZPTML_PO_EXT_SRV.Accounting" Multiplicity="*" Role="ToRole_LimitAccountings"/>
+            </Association>
+            <Association Name="ItemDetails" sap:content-version="1">
+                <End Type="ZPTML_PO_EXT_SRV.HeaderDetail" Multiplicity="1" Role="FromRole_ItemDetails"/>
+                <End Type="ZPTML_PO_EXT_SRV.ItemDetail" Multiplicity="*" Role="ToRole_ItemDetails"/>
+            </Association>
+            <Association Name="ItemAttachments" sap:content-version="1">
+                <End Type="ZPTML_PO_EXT_SRV.HeaderDetail" Multiplicity="1" Role="FromRole_ItemAttachments"/>
+                <End Type="ZPTML_PO_EXT_SRV.Attachment" Multiplicity="*" Role="ToRole_ItemAttachments"/>
+            </Association>
+            <Association Name="HeaderNotes" sap:content-version="1">
+                <End Type="ZPTML_PO_EXT_SRV.HeaderDetail" Multiplicity="1" Role="FromRole_HeaderNotes"/>
+                <End Type="ZPTML_PO_EXT_SRV.Note" Multiplicity="*" Role="ToRole_HeaderNotes"/>
+            </Association>
+            <Association Name="POComments" sap:content-version="1">
+                <End Type="ZPTML_PO_EXT_SRV.HeaderDetail" Multiplicity="1" Role="FromRole_POComments"/>
+                <End Type="ZPTML_PO_EXT_SRV.POCOMMENTS" Multiplicity="*" Role="ToRole_POComments"/>
+            </Association>
+            <Association Name="PORelease" sap:content-version="1">
+                <End Type="ZPTML_PO_EXT_SRV.HeaderDetail" Multiplicity="1" Role="FromRole_PORelease"/>
+                <End Type="ZPTML_PO_EXT_SRV.PORELEASE" Multiplicity="*" Role="ToRole_PORelease"/>
+            </Association>
+            <Association Name="PDFViews" sap:content-version="1">
+                <End Type="ZPTML_PO_EXT_SRV.HeaderDetail" Multiplicity="1" Role="FromRole_PDFViews"/>
+                <End Type="ZPTML_PO_EXT_SRV.PDFVIEW" Multiplicity="*" Role="ToRole_PDFViews"/>
+            </Association>
+            <Association Name="POText" sap:content-version="1">
+                <End Type="ZPTML_PO_EXT_SRV.HeaderDetail" Multiplicity="1" Role="FromRole_POText"/>
+                <End Type="ZPTML_PO_EXT_SRV.POHeaderText" Multiplicity="*" Role="ToRole_POText"/>
+            </Association>
+            <Association Name="PONote" sap:content-version="1">
+                <End Type="ZPTML_PO_EXT_SRV.HeaderDetail" Multiplicity="1" Role="FromRole_PONote"/>
+                <End Type="ZPTML_PO_EXT_SRV.POHeaderNote" Multiplicity="*" Role="ToRole_PONote"/>
+            </Association>
+            <EntityContainer Name="ZPTML_PO_EXT_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="ItemDetailCollection" EntityType="ZPTML_PO_EXT_SRV.ItemDetail" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="UserDetailsCollection" EntityType="ZPTML_PO_EXT_SRV.UserDetails" sap:requires-filter="true" sap:content-version="1"/>
+                <EntitySet Name="SupplierDetailCollection" EntityType="ZPTML_PO_EXT_SRV.SupplierDetail" sap:content-version="1"/>
+                <EntitySet Name="ServiceLineCollection" EntityType="ZPTML_PO_EXT_SRV.ServiceLine" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="LimitCollection" EntityType="ZPTML_PO_EXT_SRV.Limit" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="PricingConditionCollection" EntityType="ZPTML_PO_EXT_SRV.PricingCondition" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="ForwardingAgentCollection" EntityType="ZPTML_PO_EXT_SRV.ForwardingAgent" sap:content-version="1"/>
+                <EntitySet Name="AttachmentCollection" EntityType="ZPTML_PO_EXT_SRV.Attachment" sap:requires-filter="true" sap:content-version="1"/>
+                <EntitySet Name="NoteCollection" EntityType="ZPTML_PO_EXT_SRV.Note" sap:content-version="1"/>
+                <EntitySet Name="SupplierContactCollection" EntityType="ZPTML_PO_EXT_SRV.SupplierContact" sap:content-version="1"/>
+                <EntitySet Name="AccountingCollection" EntityType="ZPTML_PO_EXT_SRV.Accounting" sap:content-version="1"/>
+                <EntitySet Name="ComponentCollection" EntityType="ZPTML_PO_EXT_SRV.Component" sap:content-version="1"/>
+                <EntitySet Name="POCOMMENTSSet" EntityType="ZPTML_PO_EXT_SRV.POCOMMENTS" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="PORELEASESet" EntityType="ZPTML_PO_EXT_SRV.PORELEASE" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="PDFVIEWSet" EntityType="ZPTML_PO_EXT_SRV.PDFVIEW" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="HeaderTextSet" EntityType="ZPTML_PO_EXT_SRV.POHeaderText" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="HeaderNoteSet" EntityType="ZPTML_PO_EXT_SRV.POHeaderNote" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="SubscriptionCollection" EntityType="ZPTML_PO_EXT_SRV.Subscription" sap:content-version="1"/>
+                <EntitySet Name="NotificationCollection" EntityType="ZPTML_PO_EXT_SRV.Notification" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="LaunchPageCollection" EntityType="ZPTML_PO_EXT_SRV.LaunchPage" sap:content-version="1"/>
+                <EntitySet Name="WorkflowTaskCollection" EntityType="ZPTML_PO_EXT_SRV.WorkflowTask" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="HeaderDetailCollection" EntityType="ZPTML_PO_EXT_SRV.HeaderDetail" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:addressable="false" sap:content-version="1"/>
+                <AssociationSet Name="HeaderNotes_AssocSet" Association="ZPTML_PO_EXT_SRV.HeaderNotes" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="HeaderDetailCollection" Role="FromRole_HeaderNotes"/>
+                    <End EntitySet="NoteCollection" Role="ToRole_HeaderNotes"/>
+                </AssociationSet>
+                <AssociationSet Name="SupplierContacts_AssocSet" Association="ZPTML_PO_EXT_SRV.SupplierContacts" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="SupplierDetailCollection" Role="FromRole_SupplierContacts"/>
+                    <End EntitySet="SupplierContactCollection" Role="ToRole_SupplierContacts"/>
+                </AssociationSet>
+                <AssociationSet Name="POHeaderNote_AssocSet" Association="ZPTML_PO_EXT_SRV.PONote" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="HeaderDetailCollection" Role="FromRole_PONote"/>
+                    <End EntitySet="HeaderNoteSet" Role="ToRole_PONote"/>
+                </AssociationSet>
+                <AssociationSet Name="ItemAttachments_AssocSet" Association="ZPTML_PO_EXT_SRV.ItemAttachments" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="HeaderDetailCollection" Role="FromRole_ItemAttachments"/>
+                    <End EntitySet="AttachmentCollection" Role="ToRole_ItemAttachments"/>
+                </AssociationSet>
+                <AssociationSet Name="ServiceLineAccountings_AssocSet" Association="ZPTML_PO_EXT_SRV.ServiceLineAccountings" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ServiceLineCollection" Role="FromRole_ServiceLineAccountings"/>
+                    <End EntitySet="AccountingCollection" Role="ToRole_ServiceLineAccountings"/>
+                </AssociationSet>
+                <AssociationSet Name="ServiceLines_AssocSet" Association="ZPTML_PO_EXT_SRV.ServiceLines" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ItemDetailCollection" Role="FromRole_ServiceLines"/>
+                    <End EntitySet="ServiceLineCollection" Role="ToRole_ServiceLines"/>
+                </AssociationSet>
+                <AssociationSet Name="POComments_AssocSet" Association="ZPTML_PO_EXT_SRV.POComments" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="HeaderDetailCollection" Role="FromRole_POComments"/>
+                    <End EntitySet="POCOMMENTSSet" Role="ToRole_POComments"/>
+                </AssociationSet>
+                <AssociationSet Name="HeaderDetails_AssocSet" Association="ZPTML_PO_EXT_SRV.HeaderDetails" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="WorkflowTaskCollection" Role="FromRole_HeaderDetails"/>
+                    <End EntitySet="HeaderDetailCollection" Role="ToRole_HeaderDetails"/>
+                </AssociationSet>
+                <AssociationSet Name="Limits_AssocSet" Association="ZPTML_PO_EXT_SRV.Limits" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ItemDetailCollection" Role="FromRole_Limits"/>
+                    <End EntitySet="LimitCollection" Role="ToRole_Limits"/>
+                </AssociationSet>
+                <AssociationSet Name="PORelease_AssocSet" Association="ZPTML_PO_EXT_SRV.PORelease" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="HeaderDetailCollection" Role="FromRole_PORelease"/>
+                    <End EntitySet="PORELEASESet" Role="ToRole_PORelease"/>
+                </AssociationSet>
+                <AssociationSet Name="POHeaderText_AssocSet" Association="ZPTML_PO_EXT_SRV.POText" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="HeaderDetailCollection" Role="FromRole_POText"/>
+                    <End EntitySet="HeaderTextSet" Role="ToRole_POText"/>
+                </AssociationSet>
+                <AssociationSet Name="HeaderAttachments_AssocSet" Association="ZPTML_PO_EXT_SRV.HeaderAttachments" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ItemDetailCollection" Role="FromRole_HeaderAttachments"/>
+                    <End EntitySet="AttachmentCollection" Role="ToRole_HeaderAttachments"/>
+                </AssociationSet>
+                <AssociationSet Name="ItemNotes_AssocSet" Association="ZPTML_PO_EXT_SRV.ItemNotes" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ItemDetailCollection" Role="FromRole_ItemNotes"/>
+                    <End EntitySet="NoteCollection" Role="ToRole_ItemNotes"/>
+                </AssociationSet>
+                <AssociationSet Name="PricingConditions_AssocSet" Association="ZPTML_PO_EXT_SRV.PricingConditions" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ItemDetailCollection" Role="FromRole_PricingConditions"/>
+                    <End EntitySet="PricingConditionCollection" Role="ToRole_PricingConditions"/>
+                </AssociationSet>
+                <AssociationSet Name="Accountings_AssocSet" Association="ZPTML_PO_EXT_SRV.Accountings" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ItemDetailCollection" Role="FromRole_Accountings"/>
+                    <End EntitySet="AccountingCollection" Role="ToRole_Accountings"/>
+                </AssociationSet>
+                <AssociationSet Name="Components_AssocSet" Association="ZPTML_PO_EXT_SRV.Components" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ItemDetailCollection" Role="FromRole_Components"/>
+                    <End EntitySet="ComponentCollection" Role="ToRole_Components"/>
+                </AssociationSet>
+                <AssociationSet Name="LimitAccountings_AssocSet" Association="ZPTML_PO_EXT_SRV.LimitAccountings" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="LimitCollection" Role="FromRole_LimitAccountings"/>
+                    <End EntitySet="AccountingCollection" Role="ToRole_LimitAccountings"/>
+                </AssociationSet>
+                <AssociationSet Name="PDFViews_AssocSet" Association="ZPTML_PO_EXT_SRV.PDFViews" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="HeaderDetailCollection" Role="FromRole_PDFViews"/>
+                    <End EntitySet="PDFVIEWSet" Role="ToRole_PDFViews"/>
+                </AssociationSet>
+                <AssociationSet Name="ItemDetails_AssocSet" Association="ZPTML_PO_EXT_SRV.ItemDetails" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="HeaderDetailCollection" Role="FromRole_ItemDetails"/>
+                    <End EntitySet="ItemDetailCollection" Role="ToRole_ItemDetails"/>
+                </AssociationSet>
+                <FunctionImport Name="ApplyDecision" ReturnType="ZPTML_PO_EXT_SRV.ActionResult" m:HttpMethod="POST" sap:action-for="ZPTML_PO_EXT_SRV.WorkflowTask">
+                    <Parameter Name="WorkitemID" Type="Edm.String" Mode="In" MaxLength="12"/>
+                    <Parameter Name="DecisionKey" Type="Edm.String" Mode="In" MaxLength="4"/>
+                    <Parameter Name="Comment" Type="Edm.String" Mode="In" MaxLength="255"/>
+                </FunctionImport>
+                <FunctionImport Name="Forward" ReturnType="ZPTML_PO_EXT_SRV.ActionResult" m:HttpMethod="POST" sap:action-for="ZPTML_PO_EXT_SRV.WorkflowTask">
+                    <Parameter Name="WorkitemID" Type="Edm.String" Mode="In" MaxLength="12"/>
+                    <Parameter Name="NewApprover" Type="Edm.String" Mode="In" MaxLength="12"/>
+                    <Parameter Name="Comment" Type="Edm.String" Mode="In" MaxLength="255"/>
+                </FunctionImport>
+            </EntityContainer>
+            <atom:link
+                xmlns:atom="http://www.w3.org/2005/Atom" rel="self" href="./sap/ZPTML_PO_EXT_SRV/$metadata"/>
+                <atom:link
+                    xmlns:atom="http://www.w3.org/2005/Atom" rel="latest-version" href="./sap/ZPTML_PO_EXT_SRV/$metadata"/>
+                </Schema>
+            </edmx:DataServices>
+        </edmx:Edmx>
